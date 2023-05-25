@@ -3,9 +3,9 @@ import { Dialect } from "sequelize";
 export const NODE_ENV = "development";
 
 export const DB_CONFIG = {
-  DB: "hiraya",
-  USER: "root",
+  DB: "hris",
+  USER: "postgres",
   HOST: "localhost",
-  DIALECT: "mysql" as Dialect,
-  PASSWORD: "",
+  DIALECT: "postgres" as Dialect,
+  PASSWORD: "1234",
 };
