@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import helmet from "helmet";
 import Router from "./router";
-import { User } from "./user";
+import { User } from "./models";
 import { NODE_ENV } from "./config";
 
 class App {

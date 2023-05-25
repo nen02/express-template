@@ -1,5 +1,5 @@
-import { UserOutput } from "./userModel";
-import UserRepository from "./userRepository";
+import { UserOutput } from "../models/userModel";
+import { UserRepository } from "src/repositories";
 
 class UserService {
   private readonly userRepository: UserRepository;
