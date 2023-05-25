@@ -11,8 +11,8 @@ class UserRouter {
 
     this.router.get("/", userController.getUsers.bind(userController));
     this.router.get(
-      "/:userId",
-      userController.getUserByID.bind(userController)
+      "/:uuid",
+      userController.getUserByUUID.bind(userController)
     );
   }
 

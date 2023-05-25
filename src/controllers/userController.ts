@@ -22,6 +22,15 @@ class UserController {
 
     return res.json({ user: user });
   }
+
+  async getUserByUUID(req: Request<{ uuid: string }>, res: Response) {
+    const uuid = req.params.uuid;
+    const user = await this.userService.getUserByUUID(uuid);
+
+    if (!user) return res.sendStatus(404);
+
+    return res.json({ user: user });
+  }
 }
 
 export default UserController;

@@ -1,9 +1,26 @@
 import { IRepository } from "../types";
 import { User, UserInput, UserOutput } from "src/models";
 
+const USER_PUBLIC_ATTRIB = [
+  "uuid",
+  "username",
+  "firstName",
+  "lastName",
+  "email",
+];
+
 class UserRepository implements IRepository<UserInput, UserOutput> {
   async create(payload: UserInput): Promise<UserOutput> {
-    const user = await User.create(payload);
+    const { username, email, password, firstName, lastName } = payload;
+
+    const user = await User.create({
+      username,
+      email,
+      password,
+      firstName,
+      lastName,
+    });
+
     return user;
   }
 
@@ -15,13 +32,32 @@ class UserRepository implements IRepository<UserInput, UserOutput> {
   }
 
   async getById(id: number): Promise<UserOutput | null> {
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      attributes: USER_PUBLIC_ATTRIB,
+    });
 
-    if (!user) {
-      return null;
-    }
+    return user || null;
+  }
 
-    return user;
+  async getByUUID(uuid: string): Promise<UserOutput | null> {
+    const user = await User.findOne({
+      where: { uuid },
+      attributes: USER_PUBLIC_ATTRIB,
+    });
+
+    return user || null;
+  }
+
+  async getByUsername(username: string): Promise<UserOutput | null> {
+    const user = await User.findOne({ where: { username } });
+
+    return user || null;
+  }
+
+  async getByEmail(email: string): Promise<UserOutput | null> {
+    const user = await User.findOne({ where: { email } });
+
+    return user || null;
   }
 
   async deleteById(id: number): Promise<boolean> {
@@ -33,7 +69,9 @@ class UserRepository implements IRepository<UserInput, UserOutput> {
   }
 
   async all(): Promise<UserOutput[]> {
-    return User.findAll();
+    return User.findAll({
+      attributes: USER_PUBLIC_ATTRIB,
+    });
   }
 }
 

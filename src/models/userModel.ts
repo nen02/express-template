@@ -3,21 +3,24 @@ import database from "src/database";
 
 interface UserAttributes {
   id: number;
+  uuid: string;
   username: string;
   email: string;
   firstName: string;
   lastName: string;
-  password: string;
+  password: string | number;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
 }
 
-export interface UserInput extends Optional<UserAttributes, "id"> {}
+export interface UserInput extends Optional<UserAttributes, "id" | "uuid"> {}
 export interface UserOutput extends Required<UserAttributes> {}
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public id!: number;
+  public uuid!: string;
+
   public username!: string;
   public email!: string;
   public firstName!: string;
@@ -36,6 +39,10 @@ User.init(
       autoIncrement: true,
       unique: true,
       primaryKey: true,
+    },
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     username: {
       type: DataTypes.STRING,
