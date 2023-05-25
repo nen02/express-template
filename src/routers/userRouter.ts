@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UserController } from "src/user";
+import { UserController } from "src/controllers";
 
 class UserRouter {
   private readonly router;

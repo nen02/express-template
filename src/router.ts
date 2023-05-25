@@ -1,5 +1,5 @@
 import { Router as ExpressRouter } from "express";
-import { UserRouter } from "./user";
+import { UserRouter } from "./routers";
 
 class Router {
   private router: ExpressRouter;

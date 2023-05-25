@@ -1,5 +1,5 @@
 import { IRepository } from "../types";
-import User, { UserInput, UserOutput } from "./userModel";
+import { User, UserInput, UserOutput } from "src/models";
 
 class UserRepository implements IRepository<UserInput, UserOutput> {
   async create(payload: UserInput): Promise<UserOutput> {
