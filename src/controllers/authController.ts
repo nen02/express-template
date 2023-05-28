@@ -73,7 +73,8 @@ class AuthController {
       "password",
     ]);
 
-    if (!user) return res.status(404).json({ message: "Username not found" });
+    if (!user)
+      return res.status(403).json({ message: "Invalid username or password" });
 
     bcrypt
       .compare(password, user.password)
