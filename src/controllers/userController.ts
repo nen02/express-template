@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "src/services";
+import { AuthRequest } from "src/types";
 
 class UserController {
   private readonly userService: UserService;
@@ -8,7 +9,7 @@ class UserController {
     this.userService = new UserService();
   }
 
-  async getUsers(req: Request, res: Response) {
+  async getUsers(req: AuthRequest, res: Response) {
     const users = await this.userService.getAllUsers();
 
     return res.json({ users });

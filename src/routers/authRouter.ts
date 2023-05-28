@@ -10,6 +10,7 @@ class AuthRouter {
     const authController = new AuthController();
 
     this.router.post("/register", authController.register.bind(authController));
+    this.router.post("/login", authController.login.bind(authController));
   }
 
   getRouter(): Router {

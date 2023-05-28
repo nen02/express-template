@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { UserInput } from "src/models";
 import { UserService } from "src/services";
-import { isNumber, isString, toString } from "lodash";
+import { isString, toString } from "lodash";
+import jwt from "jsonwebtoken";
+import { SECRET_KEY } from "src/config";
 
 class AuthController {
   private readonly userService: UserService;
@@ -53,14 +55,59 @@ class AuthController {
         return res.json({ user: createdUser });
       })
       .catch(() => {
-        res.status(500).json({ error: "An error occurred" });
+        return res.status(500).json({ message: "An error occurred" });
       });
   }
 
   async login(
-    req: Request<{}, {}, { username: string; password: string | number }>,
+    req: Request<{}, {}, { username: string; password: string }>,
     res: Response
-  ) {}
+  ) {
+    const { username, password } = req.body;
+
+    if (!username || !password || !isString(password))
+      return res.status(403).json({ message: "Invalid username or password" });
+
+    const user = await this.userService.getUserByUsername(username, [
+      "id",
+      "password",
+    ]);
+
+    if (!user) return res.status(404).json({ message: "Username not found" });
+
+    bcrypt
+      .compare(password, user.password)
+      .then((passwordMatched) => {
+        if (!passwordMatched)
+          return res
+            .status(403)
+            .json({ message: "Invalid username or password" });
+
+        const token = jwt.sign(
+          {
+            id: user.id,
+            uuid: user.uuid,
+            username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+          SECRET_KEY,
+          { expiresIn: "1d" }
+        );
+
+        return res.json({
+          user: {
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+          token,
+        });
+      })
+      .catch(() => {
+        return res.status(500).json({ message: "An error occurred" });
+      });
+  }
 }
 
 export default AuthController;

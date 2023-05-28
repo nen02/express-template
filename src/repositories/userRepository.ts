@@ -11,13 +11,15 @@ const USER_PUBLIC_ATTRIB = [
 
 class UserRepository implements IRepository<UserInput, UserOutput> {
   async create(payload: UserInput): Promise<UserOutput> {
-    const { username, email, password, firstName, lastName } = payload;
+    const { username, email, password, firstName, lastName, middleName } =
+      payload;
 
     const user = await User.create({
       username,
       email,
       password,
       firstName,
+      middleName,
       lastName,
     });
 
@@ -39,23 +41,15 @@ class UserRepository implements IRepository<UserInput, UserOutput> {
     return user || null;
   }
 
-  async getByUUID(uuid: string): Promise<UserOutput | null> {
+  async getByField(
+    field: string,
+    value: string | number,
+    extraFields: string[] = []
+  ): Promise<UserOutput | null> {
     const user = await User.findOne({
-      where: { uuid },
-      attributes: USER_PUBLIC_ATTRIB,
+      where: { [field]: value },
+      attributes: [...USER_PUBLIC_ATTRIB, ...extraFields],
     });
-
-    return user || null;
-  }
-
-  async getByUsername(username: string): Promise<UserOutput | null> {
-    const user = await User.findOne({ where: { username } });
-
-    return user || null;
-  }
-
-  async getByEmail(email: string): Promise<UserOutput | null> {
-    const user = await User.findOne({ where: { email } });
 
     return user || null;
   }

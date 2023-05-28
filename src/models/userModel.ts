@@ -7,8 +7,9 @@ interface UserAttributes {
   username: string;
   email: string;
   firstName: string;
-  lastName: string;
-  password: string | number;
+  middleName: string;
+  lastName?: string;
+  password: string;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
@@ -24,6 +25,7 @@ class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public username!: string;
   public email!: string;
   public firstName!: string;
+  public middleName!: string;
   public lastName!: string;
   public password!: string;
 
@@ -57,6 +59,9 @@ User.init(
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    middleName: {
+      type: DataTypes.STRING,
     },
     lastName: {
       type: DataTypes.STRING,

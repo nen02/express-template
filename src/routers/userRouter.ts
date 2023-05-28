@@ -5,10 +5,9 @@ class UserRouter {
   private readonly router;
 
   constructor() {
-    this.router = Router();
-
     const userController = new UserController();
 
+    this.router = Router();
     this.router.get("/", userController.getUsers.bind(userController));
     this.router.get(
       "/:uuid",

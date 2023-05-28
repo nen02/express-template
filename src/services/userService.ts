@@ -9,13 +9,13 @@ class UserService {
   }
 
   async usernameExists(username: string): Promise<boolean> {
-    const user = await this.userRepository.getByUsername(username);
+    const user = await this.getUserByUsername(username);
 
     return Boolean(user);
   }
 
   async emailExists(email: string): Promise<boolean> {
-    const user = await this.userRepository.getByEmail(email);
+    const user = await this.userRepository.getByField("email", email);
 
     return Boolean(user);
   }
@@ -29,7 +29,16 @@ class UserService {
   }
 
   getUserByUUID(uuid: string): Promise<UserOutput | null> {
-    return this.userRepository.getByUUID(uuid) || null;
+    return this.userRepository.getByField("uuid", uuid) || null;
+  }
+
+  getUserByUsername(
+    username: string,
+    extraFields: string[] = []
+  ): Promise<UserOutput | null> {
+    return (
+      this.userRepository.getByField("username", username, extraFields) || null
+    );
   }
 
   getAllUsers(): Promise<UserOutput[]> {
